@@ -1,0 +1,30 @@
+{
+  "name": "busucsal",
+  "version": "2.0.0",
+  "private": true,
+  "description": "BusUCSAL — previsibilidade no transporte universitário (aplicação local: Node.js + Express + PostgreSQL/PostGIS)",
+  "main": "server/index.js",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "configurar": "node scripts/gerar-segredos.js --gravar",
+    "gerar-segredos": "node scripts/gerar-segredos.js",
+    "db:setup": "node scripts/db.js setup",
+    "db:schema": "node scripts/db.js schema",
+    "db:seed": "node scripts/db.js seed",
+    "db:reset": "node scripts/db.js reset",
+    "admin:criar": "node scripts/criar-admin.js",
+    "test": "node --test \"tests/unit/**/*.test.js\"",
+    "test:integracao": "node --test --test-concurrency=1 \"tests/integration/**/*.test.js\"",
+    "test:todos": "npm test && npm run test:integracao"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^5.1.0",
+    "pg": "^8.13.1"
+  }
+}

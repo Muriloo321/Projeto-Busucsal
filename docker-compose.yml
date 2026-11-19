@@ -1,0 +1,27 @@
+# PostgreSQL 16 + PostGIS para desenvolvimento local.
+# A senha vem do arquivo .env (POSTGRES_PASSWORD), criado com: npm run configurar
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    # A imagem oficial do PostGIS é publicada para amd64; em Macs Apple Silicon roda por emulação.
+    platform: linux/amd64
+    container_name: busucsal-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: busucsal
+      POSTGRES_USER: busucsal
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no arquivo .env}
+      TZ: America/Bahia
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - busucsal-dados:/var/lib/postgresql/data
+      - ./database/docker/00-banco-de-teste.sql:/docker-entrypoint-initdb.d/00-banco-de-teste.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U busucsal -d busucsal"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  busucsal-dados:

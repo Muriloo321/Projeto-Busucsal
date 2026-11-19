@@ -1,0 +1,29 @@
+/* ==========================================================================
+   BusUCSAL — painel da equipe
+   ========================================================================== */
+
+.painel-equipe { padding: 28px 0 40px; }
+.painel-equipe__cabeca { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.painel-equipe__cabeca p { color: var(--tinta-3); margin-top: 4px; }
+.usuario { display: flex; align-items: center; gap: 10px; color: var(--tinta-2); font-size: 0.92rem; }
+
+.duas-colunas { display: grid; grid-template-columns: minmax(300px, 400px) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 920px) { .duas-colunas { grid-template-columns: 1fr; } }
+
+.lista-avisos { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cartao-aviso { border: 1px solid var(--linha); border-radius: var(--raio); background: var(--superficie); padding: 14px; display: grid; gap: 10px; }
+.cartao-aviso--interrompe { border-left: 4px solid var(--vermelho); }
+.cartao-aviso--inativo { background: var(--superficie-2); }
+.cartao-aviso--inativo .cartao-aviso__texto { color: var(--tinta-3); }
+.cartao-aviso__texto { font-weight: 600; overflow-wrap: anywhere; }
+.cartao-aviso__meta { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font-size: 0.85rem; color: var(--tinta-3); }
+.cartao-aviso__acoes { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.filtros { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.filtro { border: 1px solid var(--linha-forte); background: #fff; color: var(--tinta-2); border-radius: 999px; padding: 4px 12px; font-size: 0.86rem; font-weight: 650; cursor: pointer; }
+.filtro[aria-pressed="true"] { background: var(--azul); color: #fff; border-color: var(--azul); }
+
+.modelos { display: flex; flex-wrap: wrap; gap: 6px; }
+.contador { text-align: right; font-size: 0.8rem; color: var(--tinta-3); }
+
+.nota-escopo { margin-top: 14px; }

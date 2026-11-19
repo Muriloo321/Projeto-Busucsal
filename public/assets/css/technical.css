@@ -1,0 +1,58 @@
+/* ==========================================================================
+   BusUCSAL — página técnica (desenvolvedores e demonstração técnica)
+   Prioridade: organização e facilidade de inspeção.
+   ========================================================================== */
+
+.tecnico { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 24px; padding: 24px 0 40px; align-items: start; }
+@media (max-width: 960px) { .tecnico { grid-template-columns: 1fr; } }
+
+.indice { position: sticky; top: 84px; display: grid; gap: 2px; }
+.indice a { text-decoration: none; color: var(--tinta-2); font-weight: 600; font-size: 0.92rem; padding: 7px 12px; border-radius: var(--raio-s); border-left: 3px solid transparent; }
+.indice a:hover { background: var(--azul-claro); color: var(--azul); }
+.indice a[aria-current="true"] { border-left-color: var(--azul); color: var(--azul); background: var(--azul-claro); }
+@media (max-width: 960px) {
+  .indice { position: static; display: flex; overflow-x: auto; gap: 4px; border-bottom: 1px solid var(--linha); padding-bottom: 8px; }
+  .indice a { white-space: nowrap; border-left: 0; }
+}
+
+.tecnico > div { min-width: 0; }
+.bloco { scroll-margin-top: 84px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; margin-bottom: 36px; min-width: 0; }
+.bloco__corpo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; min-width: 0; }
+.bloco__corpo h3 { margin-top: 6px; }
+#banco .tabela td, #requisicoes .tabela td { white-space: nowrap; }
+.bloco > header { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.bloco > header p { color: var(--tinta-3); font-size: 0.92rem; max-width: 76ch; margin-top: 2px; }
+
+.metricas { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.metrica { border: 1px solid var(--linha); border-radius: var(--raio); background: var(--superficie); padding: 14px; display: grid; gap: 6px; align-content: start; }
+.metrica__titulo { font-size: 0.86rem; color: var(--tinta-3); font-weight: 650; }
+.metrica__valor { font-size: 1.35rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.metrica__valor--vazio { color: var(--tinta-3); font-size: 1rem; font-weight: 650; }
+.metrica small { color: var(--tinta-3); font-size: 0.8rem; }
+
+.indicadores { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.indicador { border: 1px solid var(--linha); border-radius: var(--raio); background: var(--superficie); padding: 16px; display: grid; gap: 8px; align-content: start; }
+.indicador h3 { font-size: 0.98rem; }
+.indicador__valor { font-size: 1.6rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.indicador__valor--vazio { font-size: 1rem; color: var(--tinta-3); font-weight: 650; }
+.indicador__meta { font-size: 0.85rem; color: var(--tinta-2); }
+.indicador__origem { font-size: 0.8rem; color: var(--tinta-3); border-top: 1px solid var(--linha); padding-top: 8px; }
+
+.controles { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+.controles .campo { min-width: 180px; }
+
+.cenarios { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.cenario { border: 1px solid var(--linha); border-radius: var(--raio); background: var(--superficie); padding: 14px; display: grid; gap: 8px; align-content: space-between; }
+.cenario p { font-size: 0.88rem; color: var(--tinta-2); }
+
+.registro { max-height: 360px; overflow: auto; }
+.json { background: #0f1b33; color: #dbe6ff; border-radius: var(--raio); padding: 12px 14px; font-family: var(--fonte-mono); font-size: 0.8rem; overflow: auto; max-height: 320px; white-space: pre; }
+.status-http { font-weight: 700; font-variant-numeric: tabular-nums; }
+.status-http--2 { color: #13693c; }
+.status-http--4 { color: #8a5203; }
+.status-http--5 { color: var(--vermelho); }
+
+.selector-tabelas { display: flex; flex-wrap: wrap; gap: 6px; }
+.selector-tabelas button { border: 1px solid var(--linha-forte); background: #fff; border-radius: var(--raio-s); padding: 6px 10px; cursor: pointer; font-family: var(--fonte-mono); font-size: 0.82rem; color: var(--tinta-2); }
+.selector-tabelas button[aria-pressed="true"] { background: var(--azul); border-color: var(--azul); color: #fff; }
+.selector-tabelas small { opacity: 0.75; margin-left: 4px; }

@@ -1,0 +1,148 @@
+/* ==========================================================================
+   BusUCSAL — página de apresentação (estudantes, professores e banca)
+   O elemento de destaque é o diagrama da linha, como o que fica nas portas do ônibus.
+   ========================================================================== */
+
+/* ---------- Abertura ---------- */
+.abertura { padding: clamp(28px, 5vw, 52px) 0 20px; }
+.abertura__grade { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: end; }
+.abertura__texto p { color: var(--tinta-2); font-size: 1.08rem; max-width: 52ch; margin-top: 12px; }
+@media (max-width: 860px) { .abertura__grade { grid-template-columns: 1fr; } }
+
+.situacao {
+  background: var(--superficie); border: 1px solid var(--linha); border-radius: var(--raio-l);
+  padding: 20px; display: grid; gap: 12px;
+  border-left: 6px solid var(--cor-status, var(--linha-forte));
+}
+.situacao[data-status="em_circulacao"] { --cor-status: var(--verde); }
+.situacao[data-status="parado"] { --cor-status: var(--ambar); }
+.situacao[data-status="sem_dados"] { --cor-status: var(--laranja); }
+.situacao[data-status="fora_de_operacao"] { --cor-status: var(--vermelho); }
+.situacao__status { display: flex; align-items: center; gap: 12px; }
+.situacao__luz {
+  width: 14px; height: 14px; border-radius: 50%; background: var(--cor-status, var(--linha-forte)); flex: none;
+}
+.situacao[data-status="em_circulacao"] .situacao__luz { animation: pulsar 2.4s ease-out infinite; }
+@keyframes pulsar {
+  0% { box-shadow: 0 0 0 0 rgba(30, 158, 90, 0.45); }
+  70% { box-shadow: 0 0 0 12px rgba(30, 158, 90, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(30, 158, 90, 0); }
+}
+.situacao__rotulo { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+.situacao__motivo { color: var(--tinta-2); }
+.situacao__dados { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; border-top: 1px solid var(--linha); padding-top: 12px; }
+.situacao__dados dt { font-size: 0.82rem; color: var(--tinta-3); }
+.situacao__dados dd { margin: 2px 0 0; font-weight: 700; }
+
+/* ---------- Faixa de demonstração ---------- */
+.demonstracao {
+  border: 1px dashed var(--linha-forte); border-radius: var(--raio-l);
+  background: repeating-linear-gradient(-45deg, #fff, #fff 12px, #f6f8fb 12px, #f6f8fb 24px);
+  padding: 14px 16px; display: grid; gap: 10px;
+}
+.demonstracao__cabeca { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.demonstracao__cabeca strong { font-size: 0.98rem; }
+.demonstracao__cabeca span { color: var(--tinta-3); font-size: 0.88rem; }
+.demonstracao .botao[aria-pressed="true"] { background: var(--petroleo); color: #fff; border-color: var(--petroleo); }
+
+/* ---------- Diagrama da linha ---------- */
+.linha-painel { background: var(--superficie); border: 1px solid var(--linha); border-radius: var(--raio-l); padding: clamp(18px, 3vw, 28px); }
+.linha-painel__topo { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.linha-painel__topo p { color: var(--tinta-3); font-size: 0.92rem; }
+
+.linha { position: relative; margin: 0 auto; }
+.linha__trilho { position: absolute; background: #c9d3e1; border-radius: 4px; }
+.linha__percorrido { position: absolute; background: var(--petroleo); border-radius: 4px; }
+.linha__pontos { list-style: none; margin: 0; padding: 0; }
+.linha__ponto { position: absolute; }
+.linha__marco { width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 4px solid var(--azul); }
+.linha__ponto--passado .linha__marco { border-color: #9aa7bb; }
+.linha__ponto--atual .linha__marco { border-color: var(--petroleo); background: var(--petroleo-claro); }
+.linha__nome { font-weight: 700; line-height: 1.25; }
+.linha__ref { display: block; font-weight: 500; font-size: 0.8rem; color: var(--tinta-3); }
+.linha__previsao { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.linha__previsao--previsao { color: var(--tinta); }
+.linha__previsao--previsao b { font-size: 1.5rem; letter-spacing: -0.02em; }
+.linha__previsao--no_ponto { color: var(--petroleo); }
+.linha__previsao--ja_passou { color: var(--tinta-3); font-weight: 650; }
+.linha__previsao--indisponivel { color: var(--laranja); font-weight: 650; font-size: 0.9rem; }
+.linha__onibus {
+  position: absolute; z-index: 2; display: flex; align-items: center; gap: 6px;
+  transition: left 0.8s ease, top 0.8s ease;
+}
+.linha__onibus-icone {
+  width: 34px; height: 34px; border-radius: 10px; background: var(--petroleo); color: #fff;
+  display: grid; place-items: center; box-shadow: 0 0 0 4px #fff;
+}
+.linha__onibus--inativo .linha__onibus-icone { background: #8a97ad; }
+.linha__onibus-icone svg { width: 20px; height: 20px; }
+
+/* horizontal (telas largas) */
+@media (min-width: 761px) {
+  .linha { height: 190px; margin: 0 70px; }
+  .linha__trilho, .linha__percorrido { left: 0; top: 94px; height: 8px; }
+  .linha__trilho { right: 0; }
+  .linha__percorrido { width: calc(var(--prog) * 1%); }
+  .linha__ponto { top: 87px; left: calc(var(--pos) * 1%); transform: translateX(-50%); width: 150px; display: grid; justify-items: center; text-align: center; }
+  .linha__previsao { position: absolute; bottom: calc(100% + 30px); }
+  .linha__marco { position: relative; }
+  .linha__nome { margin-top: 10px; font-size: 0.95rem; }
+  .linha__onibus { top: 48px; left: calc(var(--pos) * 1%); transform: translateX(-50%); }
+  .linha__onibus-rotulo { display: none; }
+}
+/* vertical (celulares) */
+@media (max-width: 760px) {
+  .linha { height: calc((var(--n) - 1) * 84px + 22px); margin: 0 0 64px 6px; }
+  .linha__trilho, .linha__percorrido { left: 7px; top: 11px; width: 8px; }
+  .linha__trilho { bottom: 11px; }
+  .linha__percorrido { height: calc(var(--prog) * (100% - 22px) / 100); }
+  .linha__ponto {
+    left: 0; right: 0; top: calc(var(--pos) * (100% - 22px) / 100);
+    display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: start;
+  }
+  .linha__nome { font-size: 0.98rem; }
+  .linha__previsao { text-align: right; }
+  .linha__previsao--previsao b { font-size: 1.25rem; }
+  .linha__onibus { left: -6px; top: calc(var(--pos) * (100% - 22px) / 100 - 6px); }
+  .linha__onibus-rotulo { display: none; }
+}
+
+.linha-painel__nota { margin-top: 12px; color: var(--tinta-3); font-size: 0.88rem; max-width: 80ch; }
+
+/* ---------- Trajeto e avisos ---------- */
+.dupla { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 900px) { .dupla { grid-template-columns: 1fr; } }
+
+.avisos { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.aviso { border-left: 4px solid var(--azul); background: var(--superficie-2); border-radius: 0 var(--raio) var(--raio) 0; padding: 12px 14px; }
+.aviso--interrompe { border-left-color: var(--vermelho); background: var(--vermelho-claro); }
+.aviso p { font-weight: 600; }
+.aviso small { display: block; margin-top: 6px; color: var(--tinta-3); }
+
+/* ---------- Assistente ---------- */
+.assistente { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 900px) { .assistente { grid-template-columns: 1fr; } }
+.conversa { background: var(--superficie); border: 1px solid var(--linha); border-radius: var(--raio-l); display: grid; grid-template-rows: auto 1fr auto auto; overflow: hidden; }
+.conversa__topo { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--linha); }
+.conversa__identidade { display: flex; align-items: center; gap: 10px; }
+.conversa__identidade img { width: 32px; height: 32px; }
+.conversa__identidade small { display: block; color: var(--tinta-3); font-size: 0.8rem; }
+.conversa__mensagens { height: 380px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: #f7f9fc; }
+.balao { max-width: 84%; padding: 10px 13px; border-radius: 14px; white-space: pre-line; overflow-wrap: anywhere; font-size: 0.95rem; line-height: 1.45; }
+.balao--estudante { align-self: flex-end; background: var(--azul); color: #fff; border-bottom-right-radius: 4px; }
+.balao--assistente { align-self: flex-start; background: #fff; border: 1px solid var(--linha); border-bottom-left-radius: 4px; }
+.balao--sistema { align-self: center; background: transparent; color: var(--tinta-3); font-size: 0.82rem; text-align: center; padding: 2px 8px; }
+.balao__hora { display: block; font-size: 0.72rem; opacity: 0.7; margin-top: 4px; text-align: right; }
+.balao--digitando { color: var(--tinta-3); font-style: italic; }
+.conversa__atalhos { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--linha); }
+.conversa__envio { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--linha); }
+.conversa__envio .entrada { border-radius: 999px; }
+.dicas { display: grid; gap: 14px; }
+.dicas ul { margin: 0; padding-left: 18px; color: var(--tinta-2); display: grid; gap: 6px; }
+
+/* ---------- Como funciona ---------- */
+.etapas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; counter-reset: etapa; }
+.etapas li { counter-increment: etapa; padding-top: 14px; border-top: 3px solid var(--azul); }
+.etapas li::before { content: counter(etapa); display: block; font-weight: 800; font-size: 1.6rem; color: var(--azul); line-height: 1; margin-bottom: 8px; }
+.etapas p { color: var(--tinta-2); margin-top: 6px; font-size: 0.95rem; }
+@media (max-width: 760px) { .etapas { grid-template-columns: 1fr; } }

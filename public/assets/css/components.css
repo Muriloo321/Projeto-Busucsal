@@ -1,0 +1,168 @@
+/* ==========================================================================
+   BusUCSAL — componentes reutilizáveis
+   ========================================================================== */
+
+/* ---------- Superfícies ---------- */
+.painel {
+  background: var(--superficie);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-l);
+  padding: clamp(16px, 2.4vw, 24px);
+}
+.painel__titulo { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.painel__titulo h2, .painel__titulo h3 { font-size: 1.1rem; }
+
+/* ---------- Botões ---------- */
+.botao {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 40px; padding: 8px 16px;
+  border-radius: 999px; border: 1px solid transparent;
+  font-weight: 650; font-size: 0.95rem; line-height: 1.2;
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+  background: var(--azul); color: #fff;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.botao:hover { background: var(--azul-escuro); color: #fff; }
+.botao:disabled, .botao[aria-busy="true"] { opacity: 0.6; cursor: progress; }
+.botao--secundario { background: var(--superficie); color: var(--azul); border-color: var(--linha-forte); }
+.botao--secundario:hover { background: var(--azul-claro); color: var(--azul-escuro); }
+.botao--petroleo { background: var(--petroleo); }
+.botao--petroleo:hover { background: #0a5559; }
+.botao--perigo { background: var(--superficie); color: var(--vermelho); border-color: #efb8b2; }
+.botao--perigo:hover { background: var(--vermelho-claro); color: var(--vermelho); }
+.botao--discreto { background: transparent; color: var(--tinta-2); padding-left: 10px; padding-right: 10px; }
+.botao--discreto:hover { background: var(--azul-claro); color: var(--azul); }
+.botao--pequeno { min-height: 32px; padding: 4px 12px; font-size: 0.875rem; }
+.grupo-botoes { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ---------- Selos (status, situação) ---------- */
+.selo {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 0.8rem; font-weight: 700; line-height: 1.4;
+  background: var(--superficie-2); color: var(--tinta-2); border: 1px solid var(--linha);
+  white-space: nowrap;
+}
+.selo::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.selo--sem-ponto::before { display: none; }
+.selo--verde { background: var(--verde-claro); color: #13693c; border-color: #bfe6cd; }
+.selo--ambar { background: var(--ambar-claro); color: #8a5203; border-color: #f2d7a2; }
+.selo--laranja { background: var(--laranja-claro); color: #9a4307; border-color: #f5c9a8; }
+.selo--vermelho { background: var(--vermelho-claro); color: var(--vermelho); border-color: #f3c0ba; }
+.selo--azul { background: var(--azul-claro); color: var(--azul); border-color: #c8d6f3; }
+.selo--petroleo { background: var(--petroleo-claro); color: var(--petroleo); border-color: #bfe0e0; }
+.selo--demo { background: #fff; color: var(--tinta-2); border-style: dashed; border-color: var(--linha-forte); }
+.selo--demo::before { display: none; }
+
+/* ---------- Formulários ---------- */
+.campo { display: grid; gap: 6px; min-width: 0; }
+.campo label, .campo .rotulo { font-weight: 650; font-size: 0.92rem; color: var(--tinta-2); }
+.campo small { color: var(--tinta-3); font-size: 0.82rem; }
+.entrada, .area-texto, .selecao {
+  width: 100%; min-height: 42px; padding: 9px 12px;
+  background: var(--superficie); border: 1px solid var(--linha-forte); border-radius: var(--raio);
+  color: var(--tinta);
+}
+.area-texto { min-height: 92px; resize: vertical; line-height: 1.45; }
+.entrada:focus, .area-texto:focus, .selecao:focus { border-color: var(--azul); box-shadow: var(--sombra-foco); outline: none; }
+.campo--erro .entrada, .campo--erro .area-texto, .campo--erro .selecao { border-color: var(--vermelho); }
+.campo__erro { color: var(--vermelho); font-size: 0.84rem; font-weight: 600; }
+.marcador { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-weight: 600; color: var(--tinta-2); }
+.marcador input { width: 18px; height: 18px; margin-top: 3px; flex: none; accent-color: var(--azul); }
+.grade-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.grade-form--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 640px) { .grade-form--2 { grid-template-columns: 1fr; } }
+
+/* ---------- Atalhos (respostas prontas, modelos) ---------- */
+.atalho { border: 1px solid var(--linha-forte); background: #fff; color: var(--tinta-2); border-radius: 999px; padding: 5px 12px; font-size: 0.86rem; font-weight: 600; cursor: pointer; }
+.atalho:hover { border-color: var(--azul); color: var(--azul); background: var(--azul-claro); }
+
+/* ---------- Mensagens de estado ---------- */
+.estado-vazio, .estado-erro, .estado-carregando {
+  border: 1px dashed var(--linha-forte); border-radius: var(--raio);
+  padding: 18px; color: var(--tinta-3); text-align: left; font-size: 0.95rem;
+}
+.estado-erro { border-style: solid; border-color: #f3c0ba; background: var(--vermelho-claro); color: #7a1a12; }
+.estado-carregando { display: flex; align-items: center; gap: 10px; }
+.estado-carregando::before {
+  content: ""; width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid var(--linha-forte); border-top-color: var(--azul);
+  animation: girar 0.9s linear infinite;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+
+.alerta {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 12px 14px; border-radius: var(--raio); border: 1px solid var(--linha);
+  background: var(--superficie-2); font-size: 0.93rem; color: var(--tinta-2);
+}
+.alerta--aviso { background: var(--ambar-claro); border-color: #f2d7a2; color: #6b4003; }
+.alerta--erro { background: var(--vermelho-claro); border-color: #f3c0ba; color: #7a1a12; }
+.alerta--info { background: var(--azul-claro); border-color: #c8d6f3; color: var(--azul-escuro); }
+
+/* ---------- Abas ---------- */
+.abas { display: flex; gap: 4px; border-bottom: 1px solid var(--linha); margin-bottom: 20px; overflow-x: auto; }
+.abas button {
+  border: 0; background: transparent; cursor: pointer;
+  padding: 10px 14px; font-weight: 650; color: var(--tinta-3);
+  border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap;
+}
+.abas button:hover { color: var(--azul); }
+.abas button[aria-selected="true"] { color: var(--azul); border-bottom-color: var(--azul); }
+
+/* ---------- Tabelas ---------- */
+.tabela-rolagem { overflow-x: auto; border: 1px solid var(--linha); border-radius: var(--raio); background: var(--superficie); }
+.tabela { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.tabela th, .tabela td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--linha); vertical-align: top; }
+.tabela th { font-weight: 700; color: var(--tinta-2); background: var(--superficie-2); white-space: nowrap; }
+.tabela tr:last-child td { border-bottom: 0; }
+.tabela td.numero, .tabela th.numero { text-align: right; }
+.tabela--compacta th, .tabela--compacta td { padding: 6px 10px; }
+.celula-mono { font-family: var(--fonte-mono); font-size: 0.82rem; overflow-wrap: anywhere; }
+
+/* ---------- Notificações ---------- */
+.notificacoes { position: fixed; right: 16px; bottom: 16px; z-index: 60; display: grid; gap: 8px; max-width: min(380px, calc(100vw - 32px)); }
+.notificacao {
+  background: var(--tinta); color: #fff; padding: 12px 14px; border-radius: var(--raio);
+  font-size: 0.93rem; box-shadow: 0 8px 24px rgba(20, 33, 61, 0.22);
+  animation: entrar 0.2s ease-out;
+}
+.notificacao--erro { background: var(--vermelho); }
+.notificacao--sucesso { background: #146c3e; }
+@keyframes entrar { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Diálogo de confirmação ---------- */
+.dialogo { border: 1px solid var(--linha); border-radius: var(--raio-l); padding: 22px; max-width: 420px; width: calc(100vw - 32px); color: var(--tinta); }
+.dialogo::backdrop { background: rgba(20, 33, 61, 0.45); }
+.dialogo h2 { font-size: 1.15rem; margin-bottom: 8px; }
+.dialogo p { color: var(--tinta-2); margin-bottom: 18px; }
+
+/* ---------- Tela de login ---------- */
+.login {
+  max-width: 420px; margin: clamp(32px, 8vh, 80px) auto; display: grid; gap: 16px;
+}
+.login__cabeca p { color: var(--tinta-3); margin-top: 6px; }
+
+/* ---------- Representação da rota (SVG) ---------- */
+.mapa { position: relative; border: 1px solid var(--linha); border-radius: var(--raio); background: #f7f9fc; overflow: hidden; }
+.mapa svg { width: 100%; height: auto; }
+.mapa__legenda { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; font-size: 0.85rem; color: var(--tinta-3); }
+.mapa__legenda span { display: inline-flex; align-items: center; gap: 6px; }
+.mapa__legenda i { width: 18px; height: 4px; border-radius: 2px; background: var(--linha-forte); display: inline-block; }
+.mapa__legenda i.percorrido { background: var(--petroleo); }
+.mapa__legenda i.reta { background: none; border-top: 2px dashed var(--ambar); height: 0; }
+.mapa__aviso { position: absolute; left: 10px; top: 10px; }
+.svg-rota-base { fill: none; stroke: #c9d3e1; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+.svg-rota { fill: none; stroke: #8fa0bb; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.svg-rota-percorrida { fill: none; stroke: var(--petroleo); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.svg-reta { stroke: var(--ambar); stroke-width: 2; stroke-dasharray: 6 5; fill: none; }
+.svg-ponto { fill: #fff; stroke: var(--azul); stroke-width: 2.5; }
+.svg-ponto--passado { stroke: #9aa7bb; }
+.svg-ponto-numero { font-size: 11px; font-weight: 800; fill: var(--azul); text-anchor: middle; dominant-baseline: central; }
+.svg-rotulo { font-size: 13px; font-weight: 650; fill: var(--tinta-2); paint-order: stroke; stroke: #f7f9fc; stroke-width: 4px; stroke-linejoin: round; }
+.svg-onibus-halo { fill: var(--petroleo); opacity: 0.18; }
+.svg-onibus { fill: var(--petroleo); stroke: #fff; stroke-width: 2.5; }
+.svg-onibus--inativo { fill: #8a97ad; }
+.svg-escala { stroke: var(--tinta-2); stroke-width: 2; }
+.svg-escala-texto { font-size: 11px; fill: var(--tinta-3); }
+.svg-grade { stroke: #e6ebf2; stroke-width: 1; }

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BusUCSAL — onde está o ônibus da UCSAL agora</title>
+  <meta name="description" content="Localização, status e previsão de chegada do ônibus universitário da UCSAL (protótipo acadêmico).">
+  <link rel="icon" href="/assets/img/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/presentation.css">
+  <script type="module" src="/assets/js/paginas/apresentacao.js"></script>
+</head>
+<body>
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="topo">
+    <div class="conteiner topo__barra">
+      <a class="marca" href="/" aria-label="BusUCSAL, página inicial">
+        <img src="/assets/img/logo.svg" alt="" width="36" height="36">
+        <span class="marca__nome">Bus<span>UCSAL</span></span>
+      </a>
+      <nav class="navegacao" aria-label="Seções">
+        <a href="#linha">Linha</a>
+        <a href="#trajeto">Trajeto</a>
+        <a href="#avisos">Avisos</a>
+        <a href="#assistente">Assistente</a>
+        <a href="#como-funciona">Como funciona</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="abertura">
+      <div class="conteiner abertura__grade">
+        <div class="abertura__texto">
+          <h1>Onde está o BusUCSAL agora?</h1>
+          <p>Veja em que trecho o ônibus da UCSAL está, quanto tempo falta para ele chegar ao seu ponto e os avisos da equipe. A previsão é aproximada e sempre mostra o horário da última atualização.</p>
+        </div>
+        <div id="situacao" class="situacao" aria-live="polite">
+          <div class="estado-carregando" role="status">Consultando o status do ônibus…</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="conteiner">
+      <section id="demonstracao" class="demonstracao" aria-labelledby="demo-titulo" hidden>
+        <div class="demonstracao__cabeca">
+          <strong id="demo-titulo">Demonstração: escolha uma situação</strong>
+          <span>Os dados exibidos são simulados para a apresentação.</span>
+        </div>
+        <div id="demo-botoes" class="grupo-botoes"></div>
+        <p id="demo-observacao" class="alerta alerta--aviso" hidden></p>
+      </section>
+    </div>
+
+    <section class="secao" id="linha" aria-labelledby="linha-titulo">
+      <div class="conteiner">
+        <div class="linha-painel">
+          <div class="linha-painel__topo">
+            <h2 id="linha-titulo">Previsão de chegada por ponto</h2>
+            <p id="linha-sentido"></p>
+          </div>
+          <div id="linha-diagrama"><div class="estado-carregando" role="status">Carregando a linha…</div></div>
+          <p class="linha-painel__nota">Tempo aproximado, calculado pela distância que o ônibus ainda percorre pela rota e pela velocidade média dos últimos minutos. Quando o sinal do rastreador fica mais de 3 minutos sem chegar, a previsão é suspensa.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao" aria-label="Trajeto e avisos">
+      <div class="conteiner dupla">
+        <article class="painel" id="trajeto" aria-labelledby="trajeto-titulo">
+          <div class="painel__titulo">
+            <h2 id="trajeto-titulo">Trajeto e pontos de embarque</h2>
+            <span id="trajeto-selo"></span>
+          </div>
+          <div id="mapa"><div class="estado-carregando" role="status">Desenhando o trajeto…</div></div>
+          <div class="mapa__legenda" aria-hidden="true">
+            <span><i></i>Trajeto</span>
+            <span><i class="percorrido"></i>Trecho já percorrido</span>
+          </div>
+        </article>
+
+        <article class="painel" id="avisos" aria-labelledby="avisos-titulo">
+          <div class="painel__titulo"><h2 id="avisos-titulo">Avisos da equipe</h2></div>
+          <div id="lista-avisos" aria-live="polite"><div class="estado-carregando" role="status">Carregando avisos…</div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="secao" id="assistente" aria-labelledby="assistente-titulo">
+      <div class="conteiner">
+        <div class="secao__cabeca">
+          <div>
+            <h2 id="assistente-titulo">Pergunte ao assistente</h2>
+            <p>Escreva como você falaria no WhatsApp. O assistente entende o pedido, e os números da resposta vêm sempre dos dados do rastreador.</p>
+          </div>
+        </div>
+        <div class="assistente">
+          <div class="conversa">
+            <div class="conversa__topo">
+              <div class="conversa__identidade">
+                <img src="/assets/img/logo.svg" alt="" width="32" height="32">
+                <div><strong>Assistente BusUCSAL</strong><small>Simulação local, sem WhatsApp</small></div>
+              </div>
+              <button id="nova-conversa" class="botao botao--secundario botao--pequeno" type="button">Nova conversa</button>
+            </div>
+            <div id="mensagens" class="conversa__mensagens" aria-live="polite" aria-label="Mensagens da conversa"></div>
+            <div class="conversa__atalhos" id="atalhos" aria-label="Mensagens prontas">
+              <button class="atalho" type="button" data-mensagem="oi, cadê o bus?">oi, cadê o bus?</button>
+              <button class="atalho" type="button" data-mensagem="o ônibus está rodando?">Está rodando?</button>
+              <button class="atalho" type="button" data-mensagem="tem aviso?">Tem aviso?</button>
+              <button class="atalho" type="button" data-mensagem="menu">menu</button>
+              <button class="atalho" type="button" data-mensagem="1">1</button>
+              <button class="atalho" type="button" data-mensagem="2">2</button>
+              <button class="atalho" type="button" data-mensagem="3">3</button>
+              <button class="atalho" type="button" data-mensagem="4">4</button>
+            </div>
+            <form id="form-conversa" class="conversa__envio" autocomplete="off">
+              <label class="visualmente-oculto" for="entrada-mensagem">Mensagem</label>
+              <input id="entrada-mensagem" class="entrada" name="mensagem" maxlength="500" placeholder="Escreva sua pergunta ou o número do ponto">
+              <button class="botao botao--petroleo" type="submit">Enviar</button>
+            </form>
+          </div>
+          <aside class="painel dicas" aria-labelledby="dicas-titulo">
+            <h3 id="dicas-titulo">O que dá para perguntar</h3>
+            <ul>
+              <li>Onde o ônibus está: “cadê o bus?”</li>
+              <li>Quanto tempo falta: “quanto falta pro ponto 2?”</li>
+              <li>Se está funcionando: “hoje tem ônibus?”</li>
+              <li>Avisos da equipe: “tem algum atraso?”</li>
+              <li>Escolher o ponto: responda só com o número, ou diga “estou na portaria”.</li>
+            </ul>
+            <p class="suave pequeno">Se o assistente não entender, ou demorar mais de 2 segundos para entender, ele mostra um menu com opções numeradas. O ponto escolhido fica guardado por até 24 horas e depois a conversa é apagada.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao" id="como-funciona" aria-labelledby="como-titulo">
+      <div class="conteiner">
+        <div class="secao__cabeca"><h2 id="como-titulo">Como funciona</h2></div>
+        <ol class="etapas">
+          <li><h3>O ônibus envia a posição</h3><p>Um celular fixado no ônibus manda a localização a cada 30 segundos.</p></li>
+          <li><h3>O sistema calcula pela rota</h3><p>A distância até cada ponto é medida ao longo do trajeto, não em linha reta, e o status é definido pelas regras do serviço.</p></li>
+          <li><h3>Você consulta</h3><p>Pela página ou pelo assistente, sempre com o horário da última atualização.</p></li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="conteiner rodape__linha">
+      <p>BusUCSAL é um protótipo acadêmico de previsibilidade no transporte universitário.</p>
+      <nav aria-label="Acesso restrito">
+        <a href="/admin">Acesso da equipe</a>
+        <a href="/tecnico">Área técnica</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
