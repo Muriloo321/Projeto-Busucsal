@@ -53,6 +53,15 @@ test('GET /api/estado é interno: loopback, rede privada (se permitido), token i
   assert.equal(rodar(mw, req({ admin: { id: 1 } })), null);
 });
 
+test('acesso pelo túnel (ngrok) chega de 127.0.0.1 mas não é interno', () => {
+  const mw = exigirAcessoInterno(config);
+  assert.equal(rodar(mw, req({ ip: '127.0.0.1', headers: { 'X-Forwarded-For': '203.0.113.9' } })).status, 403);
+  assert.equal(rodar(mw, req({ ip: '127.0.0.1', headers: { Forwarded: 'for=203.0.113.9' } })).status, 403);
+  // Pelo túnel, a equipe logada e o token interno continuam funcionando.
+  assert.equal(rodar(mw, req({ ip: '127.0.0.1', headers: { 'X-Forwarded-For': '203.0.113.9' }, admin: { id: 1 } })), null);
+  assert.equal(rodar(mw, req({ ip: '127.0.0.1', headers: { 'X-Forwarded-For': '203.0.113.9', 'X-Internal-Token': 'token-interno-de-teste' } })), null);
+});
+
 test('rotas administrativas exigem sessão válida no servidor (não basta esconder na interface)', async () => {
   assert.equal(rodar(exigirAdmin, req()).status, 401);
   assert.equal(rodar(exigirAdmin, req({ admin: { id: 1 } })), null);
