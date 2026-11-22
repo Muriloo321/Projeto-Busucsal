@@ -62,7 +62,10 @@ function exigirAdmin(req, res, next) {
 function exigirAcessoInterno(config) {
   return function acessoInterno(req, res, next) {
     const ip = ipDoCliente(req);
-    if (ehLoopback(ip)) return next();
+    // Atrás de um túnel (ngrok, cloudflared) toda requisição chega de 127.0.0.1. Se ela veio por um proxy
+    // (cabeçalho X-Forwarded-For/Forwarded), NÃO é deste computador: não conta como acesso interno.
+    const viaProxy = Boolean(req.get('x-forwarded-for') || req.get('forwarded'));
+    if (ehLoopback(ip) && !viaProxy) return next();
     if (config.acessoInterno.permitirRedePrivada && ehRedePrivada(ip)) return next();
     const token = req.get('x-internal-token');
     if (config.acessoInterno.token && token && iguaisEmTempoConstante(token, config.acessoInterno.token)) return next();
