@@ -139,7 +139,7 @@ CREATE INDEX IF NOT EXISTS aviso_vigencia_idx ON aviso (ativo, inicio, fim);
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS sessao_conversa (
   usuario_hash      CHAR(64)    PRIMARY KEY CHECK (usuario_hash ~ '^[0-9a-f]{64}$'),
-  canal             VARCHAR(20) NOT NULL DEFAULT 'simulador' CHECK (canal IN ('simulador', 'whatsapp')),
+  canal             VARCHAR(20) NOT NULL DEFAULT 'simulador' CHECK (canal IN ('simulador', 'whatsapp', 'telegram')),
   etapa_do_dialogo  VARCHAR(30) NOT NULL DEFAULT 'inicio'
                       CHECK (etapa_do_dialogo IN ('inicio', 'aguardando_ponto', 'menu_principal', 'ponto_definido')),
   ponto_id          INTEGER REFERENCES ponto_embarque (id) ON DELETE SET NULL,
