@@ -170,7 +170,7 @@ describe('API HTTP com Express, PostgreSQL e PostGIS reais', { skip: pular }, ()
     assert.equal(nova.corpo.ponto_id, null);
   });
 
-  test('webhook do WhatsApp fora do escopo, saúde e página 404', async () => {
+  test('webhook do WhatsApp desativado, saúde e página 404', async () => {
     assert.equal((await ctx.http('POST', '/webhook/whatsapp', { corpo: {} })).status, 501);
     assert.equal((await ctx.http('GET', '/api/saude')).corpo.banco, 'ok');
     assert.equal((await ctx.http('GET', '/api/nao-existe')).status, 404);
