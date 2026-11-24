@@ -17,6 +17,7 @@
     "db:schema": "node scripts/db.js schema",
     "db:seed": "node scripts/db.js seed",
     "db:reset": "node scripts/db.js reset",
+    "whatsapp:simular": "node scripts/simular-whatsapp.js",
     "admin:criar": "node scripts/criar-admin.js",
     "test": "node --test \"tests/unit/**/*.test.js\"",
     "test:integracao": "node --test --test-concurrency=1 \"tests/integration/**/*.test.js\"",

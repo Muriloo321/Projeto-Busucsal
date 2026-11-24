@@ -189,7 +189,7 @@ Os valores iniciais (3 min, 5 min, 10 km/h, 2 s, 24 h etc.) podem ser calibrados
 | `GET /api/estado` | interno: loopback, rede privada (opcional), `X-Internal-Token` ou equipe logada | status, posição, previsões por ponto e avisos |
 | `GET /api/rota` | interno | trajeto em GeoJSON |
 | `POST /api/conversa/simulador` | interno | assistente (simulação local) |
-| `POST /webhook/whatsapp` | — | **501**: integração com a Meta fora do escopo |
+| `GET/POST /webhook/whatsapp` | token de verificação / assinatura da Meta | WhatsApp Cloud API (**501** se `WHATSAPP_ENABLED=false`). Veja [docs/WHATSAPP.md](docs/WHATSAPP.md) |
 | `POST /admin/login` · `/admin/logout` · `GET /admin/sessao` | — / sessão | autenticação |
 | `GET/POST /admin/avisos` · `PUT/DELETE /admin/avisos/:id` · `PATCH /admin/avisos/:id/ativo` | login | avisos |
 | `GET/POST /admin/pontos` · `PUT /admin/pontos/:id` · `PATCH /admin/pontos/:id/ativo` | login | pontos de embarque |
@@ -237,10 +237,9 @@ A área técnica mostra os 5 indicadores **apenas com valores medidos**. Sem dad
 
 As contagens ficam em `data/metricas.json` (ignorado pelo Git).
 
-## 11. Integrações futuras (fora do escopo desta etapa)
+## 11. Integrações
 
-- **WhatsApp Cloud API:** implementar `POST /webhook/whatsapp` (hoje 501) validando a assinatura da Meta e chamando
-  `conversaService.processar({ canal: 'whatsapp', identificador: <número>, mensagem })`. O número é pseudonimizado no serviço.
+- **WhatsApp Cloud API:** já integrado (`/webhook/whatsapp`); configuração em [docs/WHATSAPP.md](docs/WHATSAPP.md).
 - **Classificação por LLM:** passar outro `classificador` para `criarConversaService`, com a mesma interface
   `(texto, { etapa, pontos }) → { intencao, ponto_id }`. O limite de 2 s e o menu de reserva já envolvem qualquer classificador.
 - **Traccar Client no ônibus:** configurar a URL `http://<servidor>:3000/api/posicao?token=<DEVICE_TOKEN>`, o identificador igual a `TRACKER_DEVICE_IDS`
