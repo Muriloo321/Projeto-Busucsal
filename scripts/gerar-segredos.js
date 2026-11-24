@@ -20,6 +20,7 @@ const valores = {
   DEVICE_TOKEN: aleatorio(24),
   ADMIN_SESSION_SECRET: aleatorio(48),
   SESSION_HASH_SECRET: aleatorio(48),
+  WHATSAPP_VERIFY_TOKEN: aleatorio(24),
 };
 
 if (!process.argv.includes('--gravar')) {
