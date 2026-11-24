@@ -12,7 +12,7 @@ function iguaisEmTempoConstante(a, b) {
 
 /**
  * Identificador pseudonimizado da sessão de conversa (LGPD): HMAC-SHA-256 com segredo do servidor.
- * Hoje recebe um identificador local de demonstração; no futuro, o número do WhatsApp.
+ * Recebe o identificador local da demonstração ou o número do WhatsApp (nunca gravado em claro).
  */
 function hashUsuario(canal, identificador, segredo) {
   return crypto.createHmac('sha256', segredo).update(`${canal}:${identificador}`).digest('hex');
@@ -45,7 +45,7 @@ function verificarToken(token, segredo, agora = Date.now()) {
 
 /** Remove valores sensíveis de query strings antes de registrar logs. */
 function urlSemSegredos(url) {
-  return String(url || '').replace(/([?&](?:token|senha|password|key)=)[^&]*/gi, '$1***');
+  return String(url || '').replace(/([?&](?:hub\.verify_token|verify_token|token|senha|password|key)=)[^&]*/gi, '$1***');
 }
 
 module.exports = { iguaisEmTempoConstante, hashUsuario, assinarToken, verificarToken, urlSemSegredos };

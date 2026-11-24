@@ -7,10 +7,11 @@ const {
 const { criarPublicoController } = require('../controllers/publico.controller');
 const { criarAdminController } = require('../controllers/admin.controller');
 const { criarTecnicoController } = require('../controllers/tecnico.controller');
+const { criarTelegramController } = require('../controllers/telegram.controller');
 
 /**
  * Define as rotas HTTP. Endpoints do planejamento: POST /api/posicao, GET /api/estado,
- * POST /webhook/whatsapp (fora do escopo — 501) e /admin/avisos, /admin/pontos.
+ * GET/POST /webhook/whatsapp (WhatsApp Cloud API; 501 se desativado) e /admin/avisos, /admin/pontos.
  */
 function criarRotas({ express, servicos, config }) {
   const pub = criarPublicoController({ servicos, config });
@@ -77,7 +78,9 @@ function criarRotas({ express, servicos, config }) {
 
   // ---- /webhook -------------------------------------------------------------
   const webhook = express.Router();
-  webhook.post('/whatsapp', pub.whatsappForaDoEscopo);
+  webhook.get('/whatsapp', pub.whatsappVerificar);
+  webhook.post('/whatsapp', pub.whatsappReceber);
+  webhook.post('/telegram', criarTelegramController({ servicos }).receber);
 
   return { api, admin, webhook };
 }

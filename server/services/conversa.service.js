@@ -6,8 +6,8 @@ const { hashUsuario } = require('../utils/seguranca');
 
 /**
  * Assistente de conversa independente de canal.
- * Hoje é usado pelo simulador local; o futuro webhook do WhatsApp chamará `processar`
- * com canal 'whatsapp' e o número do remetente como identificador (que é pseudonimizado aqui).
+ * Usado pelo simulador local (canal 'simulador') e pelo webhook do WhatsApp (canal 'whatsapp', com o
+ * número do remetente como identificador, que é pseudonimizado aqui).
  */
 function criarConversaService({ repos, config, relogio, estadoService, metricas, classificador = classificar }) {
   const { regras } = config;

@@ -1,12 +1,18 @@
 'use strict';
 
 const { validarMensagem } = require('../domain/validacao');
-const { ValidationError, AppError } = require('../utils/errors');
+const { ValidationError, AppError, ForbiddenError, UnauthorizedError } = require('../utils/errors');
 const { ehIndisponibilidadeBanco } = require('../db/erros');
 
 /** Controladores das rotas usadas pelo rastreador, pela apresentação e pelo assistente. */
 function criarPublicoController({ servicos, config }) {
-  const { posicao, estado, conversa, repos } = servicos;
+  const { posicao, estado, conversa, whatsapp, repos } = servicos;
+
+  function exigirWhatsappAtivo() {
+    if (!whatsapp.ativo()) {
+      throw new AppError('Integração com o WhatsApp desativada. Defina WHATSAPP_ENABLED=true e as credenciais da Meta no .env.', { status: 501, codigo: 'nao_implementado' });
+    }
+  }
 
   return {
     async saude(req, res) {
@@ -52,9 +58,22 @@ function criarPublicoController({ servicos, config }) {
       res.json(await conversa.reiniciar({ canal: 'simulador', identificador: id }));
     },
 
-    // POST /webhook/whatsapp — reservado para a integração futura com a Meta.
-    whatsappForaDoEscopo() {
-      throw new AppError('Integração com o WhatsApp Cloud API fora do escopo desta etapa. Use o simulador de conversa.', { status: 501, codigo: 'nao_implementado' });
+    // GET /webhook/whatsapp — verificação do webhook pela Meta (hub.challenge).
+    whatsappVerificar(req, res) {
+      exigirWhatsappAtivo();
+      const desafio = whatsapp.verificarInscricao(req.query);
+      if (desafio === null) throw new ForbiddenError('Token de verificação inválido.', 'verificacao_invalida');
+      res.type('text/plain').status(200).send(desafio);
+    },
+
+    // POST /webhook/whatsapp — mensagens recebidas. Responde 200 logo e processa em segundo plano.
+    whatsappReceber(req, res) {
+      exigirWhatsappAtivo();
+      if (!whatsapp.assinaturaValida(req.rawBody, req.get('x-hub-signature-256'))) {
+        throw new UnauthorizedError('Assinatura do webhook inválida.', 'assinatura_invalida');
+      }
+      res.sendStatus(200);
+      whatsapp.agendar(req.body);
     },
   };
 }

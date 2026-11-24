@@ -63,7 +63,7 @@ async function iniciar() {
     logger.info(`Encerrando (${sinal})…`);
     pararManutencao();
     servicos.simulador.parar();
-    servidor.close(() => pool.end().finally(() => process.exit(0)));
+    servidor.close(() => Promise.all([servicos.whatsapp.aguardarPendentes(), servicos.telegram.aguardarPendentes()]).then(() => pool.end()).finally(() => process.exit(0)));
     setTimeout(() => process.exit(1), 5000).unref();
   };
   process.on('SIGINT', () => encerrar('SIGINT'));

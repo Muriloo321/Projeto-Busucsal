@@ -25,6 +25,53 @@ function booleano(env, nome, padrao) {
   return ['1', 'true', 'sim', 'yes'].includes(String(bruto).toLowerCase());
 }
 
+/**
+ * WhatsApp Cloud API (Meta). Desligado por padrão: com WHATSAPP_ENABLED=true as 4 credenciais passam a ser obrigatórias.
+ */
+function carregarWhatsapp(env, segredo) {
+  const ativo = booleano(env, 'WHATSAPP_ENABLED', false);
+  const base = {
+    ativo,
+    versaoApi: env.WHATSAPP_API_VERSION || 'v21.0',
+    baseUrl: (env.WHATSAPP_GRAPH_URL || 'https://graph.facebook.com').replace(/\/+$/, ''),
+    timeoutEnvioMs: inteiro(env, 'WHATSAPP_SEND_TIMEOUT_MS', 10000, { min: 1000, max: 60000 }),
+  };
+  if (!ativo) return { ...base, verifyToken: null, appSecret: null, accessToken: null, phoneNumberId: null };
+  const phoneNumberId = env.WHATSAPP_PHONE_NUMBER_ID;
+  if (!phoneNumberId || !/^\d{5,30}$/.test(phoneNumberId)) {
+    throw new ErroConfiguracao('WHATSAPP_PHONE_NUMBER_ID deve conter apenas dígitos (ID do número no painel da Meta).');
+  }
+  return {
+    ...base,
+    verifyToken: segredo('WHATSAPP_VERIFY_TOKEN', 16),
+    appSecret: segredo('WHATSAPP_APP_SECRET', 16),
+    accessToken: segredo('WHATSAPP_ACCESS_TOKEN', 20),
+    phoneNumberId,
+  };
+}
+
+/**
+ * Telegram Bot API. Desligado por padrão: com TELEGRAM_ENABLED=true o token do bot e o segredo do webhook são obrigatórios.
+ */
+function carregarTelegram(env, segredo) {
+  const ativo = booleano(env, 'TELEGRAM_ENABLED', false);
+  const base = {
+    ativo,
+    baseUrl: (env.TELEGRAM_API_URL || 'https://api.telegram.org').replace(/\/+$/, ''),
+    timeoutEnvioMs: inteiro(env, 'TELEGRAM_SEND_TIMEOUT_MS', 10000, { min: 1000, max: 60000 }),
+  };
+  if (!ativo) return { ...base, botToken: null, webhookSecret: null };
+  const botToken = segredo('TELEGRAM_BOT_TOKEN', 20);
+  if (botToken && !/^\d{5,}:[A-Za-z0-9_-]{20,}$/.test(botToken)) {
+    throw new ErroConfiguracao('TELEGRAM_BOT_TOKEN com formato inválido. Copie o token inteiro que o @BotFather enviou (ex.: 123456789:AAH...).');
+  }
+  const webhookSecret = segredo('TELEGRAM_WEBHOOK_SECRET', 16);
+  if (webhookSecret && !/^[A-Za-z0-9_-]{16,256}$/.test(webhookSecret)) {
+    throw new ErroConfiguracao('TELEGRAM_WEBHOOK_SECRET deve ter 16 a 256 caracteres usando só letras, números, _ e - (regra do Telegram).');
+  }
+  return { ...base, botToken, webhookSecret };
+}
+
 function carregarConfig(env = process.env, { exigirBanco = true } = {}) {
   const faltando = [];
   const segredo = (nome, minimo) => {
@@ -96,6 +143,9 @@ function carregarConfig(env = process.env, { exigirBanco = true } = {}) {
       intervaloAceleradoS: 2,
     },
   };
+
+  config.whatsapp = carregarWhatsapp(env, segredo);
+  config.telegram = carregarTelegram(env, segredo);
 
   if (faltando.length > 0) {
     throw new ErroConfiguracao(`Variáveis de ambiente obrigatórias ausentes: ${faltando.join(', ')}. Copie .env.example para .env e preencha.`);

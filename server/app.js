@@ -20,6 +20,8 @@ function criarApp({ express, servicos, config, logger }) {
   app.use(cabecalhosSeguranca);
   app.use(registrarRequisicoes(servicos.registroRequisicoes));
   app.use(express.static(PASTA_PUBLICA, { extensions: ['html'], index: 'index.html', maxAge: 0 }));
+  // O webhook do WhatsApp precisa do corpo bruto para conferir a assinatura da Meta (X-Hub-Signature-256).
+  app.use('/webhook', express.json({ limit: '256kb', verify: (req, res, buf) => { req.rawBody = buf; } }));
   app.use(express.json({ limit: '16kb' }));
 
   const prefixosApi = ['/api', '/admin', '/webhook'];

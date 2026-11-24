@@ -3,6 +3,8 @@
 const { criarEstadoService } = require('./services/estado.service');
 const { criarPosicaoService } = require('./services/posicao.service');
 const { criarConversaService } = require('./services/conversa.service');
+const { criarWhatsappService } = require('./services/whatsapp.service');
+const { criarTelegramService } = require('./services/telegram.service');
 const { criarAvisoService } = require('./services/aviso.service');
 const { criarPontoService } = require('./services/ponto.service');
 const { criarAuthService } = require('./services/auth.service');
@@ -22,6 +24,7 @@ function criarServicos({ repos, config, logger, hasher, relogio = { agora: () =>
   const estado = criarEstadoService({ repos, config, relogio, logger });
   const posicao = criarPosicaoService({ repos, config, relogio, estadoService: estado, logger });
   const simulador = criarSimuladorService({ repos, config, logger, relogio, fetchImpl });
+  const conversa = criarConversaService({ repos, config, relogio, estadoService: estado, metricas });
   return {
     repos,
     metricas,
@@ -29,7 +32,9 @@ function criarServicos({ repos, config, logger, hasher, relogio = { agora: () =>
     estado,
     posicao,
     simulador,
-    conversa: criarConversaService({ repos, config, relogio, estadoService: estado, metricas }),
+    conversa,
+    whatsapp: criarWhatsappService({ config, conversaService: conversa, logger, relogio, fetchImpl }),
+    telegram: criarTelegramService({ config, conversaService: conversa, logger, relogio, fetchImpl }),
     avisos: criarAvisoService({ repos, relogio }),
     pontos: criarPontoService({ repos, config }),
     auth: criarAuthService({ repos, config, relogio, hasher }),
